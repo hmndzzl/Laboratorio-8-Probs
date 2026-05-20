@@ -59,6 +59,8 @@ Esta gráfica muestra la frecuencia (o probabilidad empírica) del número de so
 * **Línea Verde Continua (Mínimo Teórico $= 15$ sobres):** El escenario utópico en el que nunca sale una sola figurita repetida. Nótese que la probabilidad de lograr esto es prácticamente cero; en las 10,000 simulaciones **ningún** caso logró completarse en 15 sobres.
 * **Análisis de la Forma:** La distribución presenta una marcada **asimetría positiva (sesgo a la derecha)**. Esto ilustra el clásico fenómeno de la "cola larga" (*long-tail*): es sumamente fácil conseguir las primeras figuritas, pero las últimas requieren abrir decenas de sobres debido a la bajísima probabilidad de obtener justamente las faltantes. Algunos coleccionistas con "mala suerte" requirieron más de $120$ sobres.
 
+<img width="1500" height="900" alt="image" src="https://github.com/user-attachments/assets/73572bec-846d-4240-b474-0d646ee4e2ba" />
+
 ---
 
 ### 2. Probabilidad de Éxito en función del Presupuesto (`probabilidad_completar.png`)
@@ -73,6 +75,8 @@ Esta gráfica de barras representa la probabilidad acumulada de haber completado
   * Para **$M = 50$ sobres**, la probabilidad de éxito es muy baja, de apenas **$5.63\%$**.
   * El umbral de la mitad de probabilidad (50%) se supera por primera vez a los **$70$ sobres** (alcanzando un **$53.36\%$**).
   * A los **$80$ sobres**, un coleccionista tiene un **$73.26\%$** de probabilidad de haber terminado su álbum.
+
+<img width="1500" height="900" alt="image" src="https://github.com/user-attachments/assets/ceb7c7fb-9843-41cc-9917-9c1fd8f3f2ac" />
 
 ---
 
