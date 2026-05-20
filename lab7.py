@@ -140,3 +140,126 @@ print("  - Las ultimas son muy dificiles (pocas chances de salir).")
 print("  - Este desequilibrio genera asimetria positiva y alta varianza.")
 print("  - No hay control sobre que sale en cada sobre: la suerte")
 print("    domina y algunos terminan rapido mientras otros tardan mucho.")
+
+# ── Etapa 2: Analisis de la probabilidad de exito ────────────────────────────
+print("\n" + "=" * 55)
+print("ETAPA 2: ANALISIS EN FUNCION DEL NUMERO DE SOBRES")
+print("=" * 55)
+
+# 1. Secuencia de numero de sobres
+M_values = [20, 25, 30, 35, 40, 45, 50, 60, 70, 80]
+
+# Reinicializar semilla para reproducibilidad perfecta e independencia de Etapa 1
+np.random.seed(2026)
+
+# Matriz para registrar la completitud de cada simulacion a los M sobres
+# Filas: Simulaciones, Columnas: Cada valor de M
+completion_matrix = np.zeros((R, len(M_values)), dtype=int)
+
+for r in range(R):
+    collected = np.zeros(N, dtype=bool)
+    # Simulamos la compra de hasta 80 sobres (el maximo valor de M)
+    for pack_idx in range(1, max(M_values) + 1):
+        pack = np.random.choice(N, S, replace=False)
+        for sticker in pack:
+            collected[sticker] = True
+        
+        # Si el numero de sobres actual es uno de nuestros milestones en M_values
+        if pack_idx in M_values:
+            m_col = M_values.index(pack_idx)
+            completion_matrix[r, m_col] = 1 if collected.all() else 0
+
+# Calcular proporciones de exito
+success_proportions = np.mean(completion_matrix, axis=0)
+
+# Imprimir tabla de resultados
+print(f"{'Sobres (M)':<12} | {'Probabilidad de exito estimada':<32}")
+print("-" * 47)
+for M, prob in zip(M_values, success_proportions):
+    print(f"{M:<12} | {prob:<32.4f}")
+
+# ── Visualizacion (Etapa 2) ──────────────────────────────────────────────────
+plt.figure(figsize=(10, 6))
+bars = plt.bar([str(m) for m in M_values], success_proportions, color='coral', edgecolor='black', alpha=0.8)
+plt.axhline(0.5, color='red', linestyle='--', linewidth=2, label='Umbral del 50% de exito')
+
+# Anadir etiquetas de valor sobre cada barra
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2.0, yval + 0.01, f'{yval:.4f}', ha='center', va='bottom', fontsize=9)
+
+plt.title('Probabilidad de completar el album en funcion del numero de sobres comprados\n'
+          f'(N={N}, S={S}, R={R:,} simulaciones)')
+plt.xlabel('Numero de sobres comprados (M)')
+plt.ylabel('Probabilidad de exito P(Completar | M sobres)')
+plt.ylim(0, 1.05)
+plt.legend()
+plt.tight_layout()
+plt.savefig('probabilidad_completar.png', dpi=150)
+plt.close()
+
+# ── Preguntas de analisis (Etapa 2) ──────────────────────────────────────────
+print("\n" + "=" * 55)
+print("PREGUNTAS DE ANALISIS - ETAPA 2")
+print("=" * 55)
+
+# Q1: First time exceeding 50% and 90%
+print("\nPregunta 1: Superacion de los umbrales del 50% y 90%")
+print("-" * 55)
+m_50 = None
+m_90 = None
+
+for M, prob in zip(M_values, success_proportions):
+    if prob > 0.5 and m_50 is None:
+        m_50 = M
+    if prob > 0.9 and m_90 is None:
+        m_90 = M
+
+print(f"  - El umbral del 50% se supera por primera vez en M = {m_50} sobres (P = {success_proportions[M_values.index(m_50)]:.4f}).")
+if m_90 is not None:
+    print(f"  - El umbral del 90% se supera por primera vez en M = {m_90} sobres.")
+else:
+    # Calcular percentil 90 teorico-muestral usando packs_results de Etapa 1
+    # que es el mismo proceso aleatorio independiente
+    p90_muestral = np.percentile(packs_results, 90)
+    print(f"  - El umbral del 90% NO se supera dentro de la secuencia dada (max M = 80, P = {success_proportions[-1]:.4f}).")
+    print(f"    Sin embargo, analizando la distribucion completa de la Etapa 1,")
+    print(f"    se requeririan al menos {int(p90_muestral)} sobres para tener un 90% de probabilidad de exito.")
+
+# Q2: Comparison with median
+print("\nPregunta 2: Comparacion con la mediana")
+print("-" * 55)
+median_packs = np.median(packs_results)
+print(f"  - Mediana muestral de sobres (Etapa 1): {median_packs:.1f} sobres.")
+print(f"  - Primer valor de M con P > 50%:       M = {m_50} sobres.")
+print(f"  - Explicacion: Son extremadamente similares debido a que la mediana es,")
+print("    por definicion, el valor de la variable aleatoria T para el cual la")
+print("    probabilidad acumulada alcanza exactamente el 50% (P(T <= mediana) = 0.5).")
+print("    Dado que M = 70 es el primer valor discreto en nuestra secuencia evaluada")
+print("    que es mayor o igual a la mediana real (69 sobres), es matematicamente")
+print("    esperable que sea el primero en superar una probabilidad de exito de 0.5.")
+
+# Q3: Union Bound for M = 50
+print("\nPregunta 3: Cota superior de la union para M = 50")
+print("-" * 55)
+M_eval = 50
+p_exito_50 = success_proportions[M_values.index(M_eval)]
+p_fracaso_50_emp = 1 - p_exito_50
+
+# Calculo de la cota: N * e^(-M * S / N)
+union_bound_50 = N * math.exp(-M_eval * S / N)
+
+print(f"  - Para M = {M_eval} sobres:")
+print(f"    - Probabilidad de exito estimada:   {p_exito_50:.4f} ({p_exito_50*100:.2f}%)")
+print(f"    - Probabilidad de fracaso estimada:  {p_fracaso_50_emp:.4f} ({p_fracaso_50_emp*100:.2f}%)")
+print(f"    - Cota de la union teorica:         N * e^(-M*S/N) = {N} * e^(-({M_eval}*{S})/{N})")
+print(f"                                        = 100 * e^(-3.5) = {union_bound_50:.4f} ({union_bound_50*100:.2f}%)")
+print()
+print("  - Evaluacion de la utilidad de la cota:")
+print(f"    ¿Es util la cota? {'SI' if union_bound_50 < 1.0 else 'NO'}.")
+print(f"    La cota es {union_bound_50:.4f} > 1. Toda probabilidad esta acotada superiormente")
+print("    por 1 de forma trivial. Por lo tanto, un limite superior mayor que 1 no aporta")
+print("    informacion util. La cota de la union asume que los eventos de que falte cada")
+print("    estampa son disjuntos, lo cual es una aproximacion burda cuando M es pequeño")
+print("    y las intersecciones entre eventos son grandes. La cota solo se vuelve util (< 1)")
+print("    cuando M > (N * ln(N)) / S, es decir, a partir de M = 66 sobres.")
