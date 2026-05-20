@@ -53,8 +53,6 @@ Las simulaciones generan dos visualizaciones clave que describen detalladamente 
 ### 1. Distribución del Número de Sobres (`distribucion_sobres.png`)
 Esta gráfica muestra la frecuencia (o probabilidad empírica) del número de sobres necesarios para completar el álbum a lo largo de las $10,000$ ejecuciones.
 
-![Distribución del número de sobres para completar el álbum](file:///Users/hugoml/Documents/U/A3/S1/Probabilidades/Laboratorio-7-Probs/distribucion_sobres.png)
-
 * **Eje X (Horizontal - Número de sobres comprados):** Representa la cantidad de sobres que le tomó a un coleccionista completar el álbum.
 * **Eje Y (Vertical - Frecuencia):** Indica en cuántas de las $10,000$ simulaciones se requirió exactamente esa cantidad de sobres.
 * **Línea Roja Discontinua (Media Muestral $\approx 72.25$ sobres):** Muestra el promedio de sobres necesarios.
@@ -66,7 +64,6 @@ Esta gráfica muestra la frecuencia (o probabilidad empírica) del número de so
 ### 2. Probabilidad de Éxito en función del Presupuesto (`probabilidad_completar.png`)
 Esta gráfica de barras representa la probabilidad acumulada de haber completado el álbum tras comprar una cantidad fija $M$ de sobres.
 
-![Probabilidad de completar el álbum en función de M](file:///Users/hugoml/Documents/U/A3/S1/Probabilidades/Laboratorio-7-Probs/probabilidad_completar.png)
 
 * **Eje X (Horizontal - Sobres Comprados $M$):** Hitos discretos de sobres evaluados ($20, 25, 30, \dots, 80$).
 * **Eje Y (Vertical - Probabilidad de Éxito):** La probabilidad empírica $P(\text{Completar} \mid M \text{ sobres})$.
