@@ -106,6 +106,16 @@ Para un presupuesto de **$M = 50$** sobres:
 
 ## 🚀 Cómo Ejecutar el Proyecto
 
+### Clonar el repositorio
+```bash
+git clone https://github.com/jsam1904/Laboratorio-7-Probs.git
+```
+### Ir a la carpeta
+
+```bash
+cd Laboratorio-7-Probs
+```
+
 ### Requisitos Previos
 Asegúrate de tener instalado Python y las bibliotecas necesarias:
 ```bash
