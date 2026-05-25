@@ -23,6 +23,7 @@ Este repositorio contiene la implementación y el análisis de una **Simulación
 | **Lab 7** | Etapa 1 — Distribución del nº de sobres | `Lab 7/lab7.py`, `Lab 7/lab7.ipynb` |
 | **Lab 7** | Etapa 2 — Probabilidad en función del nº de sobres | `Lab 7/lab7.py`, `Lab 7/lab7.ipynb` |
 | **Lab 8** | Etapa 3 — Incorporación del presupuesto y costo | `Lab 8/lab8.py`, `Lab 8/lab8.ipynb` |
+| **Lab 8** | Etapa 4 — Efecto del intercambio de repetidas | `Lab 8/lab8.py`, `Lab 8/lab8.ipynb` |
 
 ---
 
@@ -175,16 +176,61 @@ La caja ahorra Q 13 frente a 104 sueltos. Esos Q 13 más Q 2.50 de vuelto de la 
 
 ---
 
+## 🔄 Etapa 4 — Efecto del intercambio de repetidas (Lab 8)
+
+En la Etapa 4 se introduce un mecanismo de intercambio: cada $K$ estampas repetidas se pueden canjear por 1 estampa nueva (a elegir entre las que faltan). Se exploran los valores de $K \in \{1, 2, 5, 10\}$.
+
+### 📊 Parte A: Simulación hasta completar el álbum
+
+| Configuración | Media de Sobres | Desviación Estándar | Reducción vs. Sin Intercambio |
+| :--- | :---: | :---: | :---: |
+| **Sin intercambio** | ~72.25 sobres | 17.47 | - |
+| **K = 10** | ~35.15 sobres | 2.45 | **51.35%** |
+| **K = 5** | ~28.11 sobres | 1.44 | **61.09%** |
+| **K = 2** | ~19.85 sobres | 0.54 | **72.53%** |
+| **K = 1** | ~15.00 sobres | 0.00 | **79.24%** |
+
+> [!NOTE]
+> La disminución de K reduce drásticamente el número medio de sobres necesarios. La mejora no es lineal: pasar de $K=10$ a $K=5$ ofrece una mejora importante, pero los saltos hacia $K=2$ y $K=1$ presentan ganancias masivas.
+
+### 📈 Parte B: Probabilidad en función de M sobres
+
+Se evaluaron secuencias fijas de $M$ sobres ($20, 25, 30, \dots, 70$) para determinar los puntos donde se alcanzan ciertas probabilidades clave:
+
+| Configuración | Sobres para 50% | Sobres para 75% | Sobres para 90% |
+| :--- | :---: | :---: | :---: |
+| **Sin intercambio** | 70 | >70 | >70 |
+| **K = 10** | 35 | 40 | 40 |
+| **K = 5** | 30 | 30 | 30 |
+| **K = 2** | 20 | 20 | 20 |
+| **K = 1** | 20 | 20 | 20 |
+
+---
+
+## 🔍 Análisis Profundo (Etapa 4)
+
+### 1. Ahorro monetario (K = 2)
+Para $K = 2$, se ahorran en promedio **52.40 sobres** respecto al caso sin intercambio. Multiplicando por Q 9.50/sobre, esto representa un ahorro monetario sustancial de **Q 497.80**.
+
+### 2. Rendimientos Decrecientes
+Valores de $K$ más altos (por ejemplo, mayores a 10) ofrecen beneficios marginales muy reducidos. Con tasas exigentes, la mayoría de figuritas repetidas nunca alcanzan el umbral para canjearse y el efecto sobre la distribución se diluye fuertemente.
+
+### 3. Costo Efectivo del Canje
+Aunque las repetidas provienen de sobres ya pagados (costo hundido), su "costo de oportunidad" (inversión indirecta por cada estampa canjeada) es de $K \cdot (9.50 / 7)$ Quetzales. 
+Por ejemplo, para $K = 2$ es de Q 2.71, y para $K = 10$ es de Q 13.57. $K = 1$ es la tasa más rentable pues transforma cada repetida inútil directamente en una estampa útil.
+
+---
+
 ## 🚀 Cómo Ejecutar el Proyecto
 
 ### Clonar el repositorio
 ```bash
-git clone https://github.com/jsam1904/Laboratorio-7-Probs.git
+git clone https://github.com/hmndzzl/Laboratorio-8-Probs.git
 ```
 ### Ir a la carpeta
 
 ```bash
-cd Laboratorio-7-Probs
+cd Laboratorio-8-Probs
 ```
 
 ### Requisitos Previos
@@ -207,7 +253,7 @@ jupyter notebook "Lab 7/lab7.ipynb"
 python "Lab 7/lab7.py"
 ```
 
-### Lab 8 — Etapa 3
+### Lab 8 — Etapas 3 y 4
 
 #### Lab 8 · Jupyter Notebook (interactivo)
 
@@ -221,4 +267,4 @@ jupyter notebook "Lab 8/lab8.ipynb"
 python "Lab 8/lab8.py"
 ```
 
-El script imprimirá el análisis detallado y las respuestas a las preguntas directamente en la consola, y guardará el gráfico `proporcion_completar_budget.png` en el directorio de trabajo.
+El script imprimirá el análisis detallado y las respuestas a las preguntas directamente en la consola, y guardará los gráficos correspondientes (`proporcion_completar_budget.png`, `hist_intercambio.png`, `prob_vs_M_intercambio.png`) en el directorio de trabajo.
